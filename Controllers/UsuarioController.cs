@@ -22,12 +22,9 @@ namespace Senai.Financas.Mvc.Web.Controllers
             usuarioModel.Email = form["email"];
             usuarioModel.DataNascimento = DateTime.Parse(form["dataNascimento"]);
             usuarioModel.Senha = form["senha"];
-            usuarioModel.ID = System.IO.File.ReadAllLines("usuarios.csv").Length+1;
-
-
-            using(StreamWriter sw = new StreamWriter("usuarios.csv",true)){
-                sw.WriteLine($"{usuarioModel.ID};{usuarioModel.Nome};{usuarioModel.Email};{usuarioModel.Senha};{usuarioModel.DataNascimento}");
-            }
+            
+            UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
+            usuarioRepositorio.Cadastrar(usuarioModel);
 
             ViewBag.Mensagem = "Usuário Cadastrado";
 
@@ -97,34 +94,21 @@ namespace Senai.Financas.Mvc.Web.Controllers
 
         [HttpGet]
         public IActionResult Editar (int id){
-            string[] linhas = System.IO.File.ReadAllLines("usuarios.csv");
+            
 
             if(id == 0){
                 TempData["Mensagem"] = "Informe um id";
                 return RedirectToAction("Listar");
             }
 
-            for (int i = 0; i < linhas.Length; i++)
-            {
-                if(string.IsNullOrEmpty(linhas[i])){
-                    continue;
-                }
-                string[] dados = linhas[i].Split(';');
+            UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
+            UsuarioModel usuario = usuarioRepositorio.BuscarPorId(id);
 
-                if(dados[0] == id.ToString()){
-                    UsuarioModel usuario = new UsuarioModel();
-                    usuario.ID = int.Parse(dados[0]);
-                    usuario.Nome = dados[1];
-                    usuario.Email = dados[2];
-                    usuario.Senha = dados[3];
-                    usuario.DataNascimento = DateTime.Parse(dados[4]);
-
-                    ViewBag.Usuario = usuario;
-                    return View();
-                }
-                
+            if(usuario != null){
+                ViewBag.Usuario = usuario;
+                return View();
             }
-
+            
             TempData["Mensagem"] = "Usuário não encontrado";
             return RedirectToAction("Listar");
         }
@@ -132,23 +116,16 @@ namespace Senai.Financas.Mvc.Web.Controllers
         [HttpPost]
         public IActionResult Editar (IFormCollection form)
         {
-            string[] linhas = System.IO.File.ReadAllLines("usuarios.csv");
+            UsuarioModel usuario = new UsuarioModel();
+            usuario.ID = int.Parse(form["id"]);
+            usuario.Nome = form["nome"];
+            usuario.Email = form["email"];
+            usuario.Senha = form["senha"];
+            usuario.DataNascimento = DateTime.Parse(form["email"]);
 
-                for (int i = 0; i < linhas.Length; i++)
-            {
-                if(string.IsNullOrEmpty(linhas[i])){
-                    continue;
-                }
-                string[] dados = linhas[i].Split(';');
-
-
-                    if(dados[0] == form["id"]){
-                    linhas[i] = $"{form["id"]};{form["nome"]};{form["email"]};{form["senha"]};{form["dataNascimento"]}";
-                    break;
-                    }                
-            }
-            System.IO.File.WriteAllLines("usuarios.csv", linhas);
-
+            UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
+            usuarioRepositorio.Editar(usuario);
+            
             TempData["Mensagem"] = "Usuário editado com sucesso";
             return RedirectToAction("Listar");
         }
