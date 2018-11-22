@@ -1,0 +1,31 @@
+<h1>Formulário de Cadastro de Transação</h1>
+
+@ViewBag.Mensagem
+
+<form action="/Transacao/Cadastrar" method="POST">
+
+    <label>
+        Descrição:
+        <input type="text" name="descricao"  required="true">
+    </label>
+
+    <label>
+        Valor
+        <input type="text" name="valor" required="true">
+    </label>
+
+    <label>
+        Tipo
+        <select name="tipo">
+            <option value="despesa">Despesa</option>
+            <option value="receita">Receita</option>
+        </select>
+    </label>
+
+    <label>
+        Data
+        <input type="date" name="data" required="true"> 
+    </label>
+
+    <input type="submit" value="Enviar">
+</form>

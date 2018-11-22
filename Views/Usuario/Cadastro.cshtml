@@ -1,0 +1,25 @@
+<html>
+    <h1>Formulário de Cadastro</h1>
+
+    @ViewBag.Mensagem
+
+    <form action="/Usuario/Cadastro" method="POST">
+        <label>
+            Nome
+            <input type="text" name="nome">
+        </label>
+        <label>
+            E-mail
+            <input type="email" name="email">
+        </label>
+        <label>
+            Senha
+            <input type="password" name="senha">
+        </label>
+        <label>
+            Data de nascimento
+            <input type="text" name="dataNascimento">
+        </label>
+        <button type="submit">Salvar</button>
+    </form>
+</html>

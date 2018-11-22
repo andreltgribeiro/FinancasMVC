@@ -1,0 +1,32 @@
+@using Senai.Financas.Mvc.Web.Models;
+<html>
+    <h1>Formulário de Edição</h1>
+
+    @*Obtendo o usuário através do ViewBag*@
+    @{
+        UsuarioModel usuario = ViewBag.Usuario;
+    }
+
+    @ViewBag.Mensagem
+
+    <form action="/Usuario/Editar" method="POST">
+        <input type="hidden" value="@usuario.ID" name="id">
+        <label>
+            Nome
+            <input type= "Usuario" value="@usuario.Nome" name="nome">
+        </label>
+        <label>
+            E-mail
+            <input type="email" value="@usuario.Email" name="email">
+        </label>
+        <label>
+            Senha
+            <input type="password" value="@usuario.Senha" name="senha">
+        </label>
+        <label>
+            Data de nascimento
+            <input type="text" value="@usuario.DataNascimento.ToString("yyyy-MM-dd")" name="dataNascimento">
+        </label>
+        <button type="submit">Salvar</button>
+    </form>
+</html>
