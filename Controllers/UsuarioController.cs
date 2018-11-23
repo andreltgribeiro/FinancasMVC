@@ -16,7 +16,7 @@ namespace Senai.Financas.Mvc.Web.Controllers
 
         [HttpPost]
         public ActionResult Cadastro(IFormCollection form){
-            UsuarioModel usuarioModel = new UsuarioModel();
+            UsuarioModel usuarioModel = new UsuarioModel(nome:form["nome"], email:form["email"], senha:form["senha"], dataNascimento:DateTime.Parse(form["dataNascimento"]));
 
             usuarioModel.Nome = form["nome"];
             usuarioModel.Email = form["email"];
@@ -40,10 +40,10 @@ namespace Senai.Financas.Mvc.Web.Controllers
             
             //Pega os dados do POST
             UsuarioModel usuario = new UsuarioModel
-            {
-                Email = form["email"],
-                Senha = form["senha"]
-            };
+            (
+                email: form["email"],
+                senha: form["senha"]
+            );
 
             //Verificar se o usuário possuí acesso para realizazr login
             UsuarioRepositorio usuarioRep = new UsuarioRepositorio();
@@ -116,12 +116,12 @@ namespace Senai.Financas.Mvc.Web.Controllers
         [HttpPost]
         public IActionResult Editar (IFormCollection form)
         {
-            UsuarioModel usuario = new UsuarioModel();
+            UsuarioModel usuario = new UsuarioModel(id:int.Parse(form["id"]), nome:form["nome"], email:form["email"], senha:form["senha"], dataNascimento:DateTime.Parse(form["dataNascimento"]));
             usuario.ID = int.Parse(form["id"]);
             usuario.Nome = form["nome"];
             usuario.Email = form["email"];
             usuario.Senha = form["senha"];
-            usuario.DataNascimento = DateTime.Parse(form["email"]);
+            usuario.DataNascimento = DateTime.Parse(form["dataNascimento"]);
 
             UsuarioRepositorio usuarioRepositorio = new UsuarioRepositorio();
             usuarioRepositorio.Editar(usuario);
